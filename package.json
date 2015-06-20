@@ -1,0 +1,37 @@
+{
+  "name": "gulp-scripts-index",
+  "version": "0.0.0",
+  "description": "Input html file(s) and get a stream of all referenced scripts which can then be used for further processing, like concatenation, minification or for testing",
+  "homepage": "",
+  "repository": "burnedikt/gulp-scripts-index",
+  "author": {
+    "name": "Benedikt Reiser",
+    "email": "benedikt.reiser@gmail.com",
+    "url": "benedikt-reiser.de"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "scripts",
+    "index",
+    "karma",
+    "parser"
+  ],
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "gulp-eslint": "^0.8.0",
+    "gulp-istanbul": "^0.8.1",
+    "gulp-jscs": "^1.1.0",
+    "gulp-jshint": "^1.5.3",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0",
+    "jshint-stylish": "^1.0.0",
+    "gulp-coveralls": "^0.1.0"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "license": "MIT"
+}
