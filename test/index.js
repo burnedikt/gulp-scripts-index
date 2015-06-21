@@ -21,6 +21,40 @@ describe('gulp-scripts-index', function () {
     'main.js'
   ];
 
+  /**
+   * function asserting that all scripts have been detected and added to the stream
+   * @param  {Array}   files List of relative paths to scripts
+   * @param  {Function} done
+   */
+  var assertWithoutIE = function(files, done) {
+    // loop over the files and create a new array with just the relative paths
+    var relatives = files.map(function(file) {
+      return file.relative;
+    });
+    // now that we have the file list, perform some assertions
+    assert.equal(relatives.length, expected.length, 'there should be ' + expected.length + ' referenced script (without IE scripts) in the input document');
+    // make sure we got all expected scripts
+    for (var i = expected.length - 1; i >= 0; i--) {
+      assert.equal(relatives[i], expected[i], 'should have detected ' + expected[i]);
+    }
+    done();
+  };
+
+  var assertWithIE = function(files, done) {
+    var expected = expectedWithIE;
+    // loop over the files and create a new array with just the relative paths
+    var relatives = files.map(function(file) {
+      return file.relative;
+    });
+    // now that we have the file list, perform some assertions
+    assert.equal(relatives.length, expected.length, 'there should be ' + expected.length + ' referenced script in the input document');
+    // make sure we got all expected scripts
+    for (var i = expected.length - 1; i >= 0; i--) {
+      assert.equal(relatives[i], expected[i], 'should have detected ' + expected[i]);
+    }
+    done();
+  };
+
   describe('in-streaming-mode', function () {
     it('should add all scripts in index.html to the stream', function (done) {
       // load the input.html file as a file stream
@@ -31,17 +65,7 @@ describe('gulp-scripts-index', function () {
           IE: false
         }))
         .pipe(gutil.buffer(function(err, files) {
-          // loop over the files and create a new array with just the relative paths
-          var relatives = files.map(function(file) {
-            return file.relative;
-          });
-          // now that we have the file list, perform some assertions
-          assert.equal(relatives.length, 4, 'there are 4 referenced script (without IE scripts) in the input document');
-          // make sure we got all expected scripts
-          for (var i = expected.length - 1; i >= 0; i--) {
-            assert.equal(relatives[i], expected[i], 'should have detected ' + expected[i]);
-          }
-          done();
+          assertWithoutIE(files, done);
         }));
     });
 
@@ -54,18 +78,7 @@ describe('gulp-scripts-index', function () {
           IE: true
         }))
         .pipe(gutil.buffer(function(err, files) {
-          var expected = expectedWithIE;
-          // loop over the files and create a new array with just the relative paths
-          var relatives = files.map(function(file) {
-            return file.relative;
-          });
-          // now that we have the file list, perform some assertions
-          assert.equal(relatives.length, 5, 'there are 5 referenced script in the input document');
-          // make sure we got all expected scripts
-          for (var i = expected.length - 1; i >= 0; i--) {
-            assert.equal(relatives[i], expected[i], 'should have detected ' + expected[i]);
-          }
-          done();
+          assertWithIE(files, done);
         }));
     });
   });
