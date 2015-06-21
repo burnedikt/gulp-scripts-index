@@ -1,7 +1,7 @@
 {
   "name": "gulp-scripts-index",
-  "version": "0.0.0",
-  "description": "Input html file(s) and get a stream of all referenced scripts which can then be used for further processing, like concatenation, minification or for testing",
+  "version": "0.1.0",
+  "description": "Input html file(s) and get a stream of all referenced scripts which can then be usedfor further processing like concatenation, minification or for testing",
   "homepage": "",
   "repository": "burnedikt/gulp-scripts-index",
   "author": {
@@ -17,7 +17,8 @@
     "scripts",
     "index",
     "karma",
-    "parser"
+    "parser",
+    "htmlparser2"
   ],
   "devDependencies": {
     "gulp": "^3.6.0",
@@ -29,8 +30,7 @@
     "gulp-mocha": "^2.0.0",
     "gulp-plumber": "^1.0.0",
     "jshint-stylish": "^1.0.0",
-    "should": "^7.0.1",
-    "vinyl": "^0.5.0"
+    "should": "^7.0.1"
   },
   "scripts": {
     "test": "gulp"
