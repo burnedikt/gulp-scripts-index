@@ -82,4 +82,28 @@ describe('gulp-scripts-index', function () {
         }));
     });
   });
+
+  describe('in-buffer-mode', function () {
+    it('should add all scripts in index.html to the stream', function (done) {
+      // load the input.html file as a file stream
+      gulp.src(['test/input/index.html'])
+        .pipe(gulpScriptsIndex({
+          IE: false
+        }))
+        .pipe(gutil.buffer(function(err, files) {
+          assertWithoutIE(files, done);
+        }));
+    });
+
+    it('should add all scripts in index.html (including IE scripts) to the stream', function (done) {
+      // load the input.html file as a file stream
+      gulp.src(['test/input/index.html'])
+        .pipe(gulpScriptsIndex({
+          IE: true
+        }))
+        .pipe(gutil.buffer(function(err, files) {
+          assertWithIE(files, done);
+        }));
+    });
+  });
 });
