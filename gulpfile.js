@@ -17,8 +17,7 @@ gulp.task('static', function () {
   return gulp.src([
       '**/*.js',
       '!node_modules/**',
-      '!coverage/**',
-      '!test/input/**'
+      '!coverage/**'
     ])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
@@ -36,7 +35,7 @@ gulp.task('pre-test', function () {
 gulp.task('test', ['pre-test'], function (cb) {
   var mochaErr;
 
-  gulp.src(['test/**/*.js', '!test/input/**'])
+  gulp.src(['test/**/*.js'])
     .pipe(plumber())
     .pipe(mocha({reporter: 'spec'}))
     .on('error', function (err) {
