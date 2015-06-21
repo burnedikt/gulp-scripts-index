@@ -25,6 +25,8 @@
         <script src="vendor/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-{{JQUERY_VERSION}}.min.js"><\/script>')</script>
         <script src="plugins.js"></script>
+        <!-- the reference to this script is incorrect, since the file isn't stored in the same folder as the index.html
+         By taking a look at all 'searchPaths' we can still find it -->
         <script src="main.js"></script>
         <!-- fake script producing errors -->
         <script src=" "></script>

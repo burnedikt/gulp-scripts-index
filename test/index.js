@@ -7,52 +7,36 @@ var through = require('through2');
 
 describe('gulp-scripts-index', function () {
   // expected array of scripts
-  var expectedWithIE = [
+  var expectedVanilla = [
     'test/input/vendor/modernizr-2.8.3.min.js',
     'test/input/vendor/jquery.min.js',
-    'test/input/plugins.js',
-    'test/input/main.js',
-    'test/input/ie-specific.js'
+    'test/input/plugins.js'
   ];
+  // expected array with specified search path
+  var expectedWithSearchPath = expectedVanilla.slice(0);
+  expectedWithSearchPath.push('test/input/searchpath/main.js');
   // expected array of scripts (everything in IE mode just without the ie-specific script)
-  var expected = expectedWithIE.slice(0, -1);
+  var expectedWithIE = expectedVanilla.slice(0);
+  expectedWithIE.push('test/input/ie-specific.js');
+  // expected array of scripts including both ie scripts and scripts from a different search path
+  var expectedTotal = expectedWithSearchPath.slice(0);
+  expectedTotal.push('test/input/ie-specific.js');
 
   /**
    * function asserting that all scripts have been detected and added to the stream
    * @param  {Array}   files List of relative paths to scripts
    * @param  {Function} done
    */
-  var assertWithoutIE = function(files, done) {
+  var assertScriptsDetected = function(actual, expected, done) {
     try {
       // loop over the files and create a new array with just the relative paths
-      var relatives = files.map(function(file) {
+      var relatives = actual.map(function(file) {
         return file.relative;
       });
       // now that we have the file list, perform some assertions
       relatives.should.have.length(expected.length);
       // make sure we got all expected scripts
       relatives.should.containDeepOrdered(expected);
-      done();
-    } catch (e) {
-      done(e);
-    }
-  };
-
-  /**
-   * function asserting that all scripts have been detected and added to the stream (including IE scripts)
-   * @param  {Array}   files List of relative paths to scripts
-   * @param  {Function} done
-   */
-  var assertWithIE = function(files, done) {
-    try {
-      // loop over the files and create a new array with just the relative paths
-      var relatives = files.map(function(file) {
-        return file.relative;
-      });
-      // now that we have the file list, perform some assertions
-      relatives.should.have.length(expectedWithIE.length);
-      // make sure we got all expected scripts
-      relatives.should.containDeepOrdered(expectedWithIE);
       done();
     } catch (e) {
       done(e);
@@ -70,13 +54,13 @@ describe('gulp-scripts-index', function () {
       done();
     });
 
-    it('should add all scripts in index.html to the stream', function (done) {
+    it('should add all scripts in index.html to the stream (without searchpath)', function (done) {
       inputStream
         .pipe(gulpScriptsIndex({
           IE: false
         }))
         .pipe(gutil.buffer(function(err, files) {
-          assertWithoutIE(files, done);
+          assertScriptsDetected(files, expectedVanilla, done);
         }));
     });
 
@@ -87,7 +71,31 @@ describe('gulp-scripts-index', function () {
           IE: true
         }))
         .pipe(gutil.buffer(function(err, files) {
-          assertWithIE(files, done);
+          assertScriptsDetected(files, expectedWithIE, done);
+        }));
+    });
+
+    it('should add also find scripts in a path specified via the searchPaths parameter', function (done) {
+      // load the input.html file as a file stream
+      inputStream
+        .pipe(gulpScriptsIndex({
+          IE: false,
+          searchPaths: ['test/input/searchpath']
+        }))
+        .pipe(gutil.buffer(function(err, files) {
+          assertScriptsDetected(files, expectedWithSearchPath, done);
+        }));
+    });
+
+    it('should find all scripts (IE + scripts at specified searchpath + normal scripts)', function (done) {
+      // load the input.html file as a file stream
+      inputStream
+        .pipe(gulpScriptsIndex({
+          IE: true,
+          searchPaths: ['test/input/searchpath']
+        }))
+        .pipe(gutil.buffer(function(err, files) {
+          assertScriptsDetected(files, expectedTotal, done);
         }));
     });
   });
@@ -108,7 +116,7 @@ describe('gulp-scripts-index', function () {
           IE: false
         }))
         .pipe(gutil.buffer(function(err, files) {
-          assertWithoutIE(files, done);
+          assertScriptsDetected(files, expectedVanilla, done);
         }));
     });
 
@@ -119,7 +127,31 @@ describe('gulp-scripts-index', function () {
           IE: true
         }))
         .pipe(gutil.buffer(function(err, files) {
-          assertWithIE(files, done);
+          assertScriptsDetected(files, expectedWithIE, done);
+        }));
+    });
+
+    it('should add also find scripts in a path specified via the searchPaths parameter', function (done) {
+      // load the input.html file as a file stream
+      inputStream
+        .pipe(gulpScriptsIndex({
+          IE: false,
+          searchPaths: ['test/input/searchpath']
+        }))
+        .pipe(gutil.buffer(function(err, files) {
+          assertScriptsDetected(files, expectedWithSearchPath, done);
+        }));
+    });
+
+    it('should find all scripts (IE + scripts at specified searchpath + normal scripts)', function (done) {
+      // load the input.html file as a file stream
+      inputStream
+        .pipe(gulpScriptsIndex({
+          IE: true,
+          searchPaths: ['test/input/searchpath']
+        }))
+        .pipe(gutil.buffer(function(err, files) {
+          assertScriptsDetected(files, expectedTotal, done);
         }));
     });
   });
