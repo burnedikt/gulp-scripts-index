@@ -56,52 +56,69 @@ describe('gulp-scripts-index', function () {
   };
 
   describe('in-streaming-mode', function () {
-    it('should add all scripts in index.html to the stream', function (done) {
+    var inputStream;
+
+    beforeEach(function(done) {
       // load the input.html file as a file stream
-      gulp.src(['test/input/index.html'], {
+      inputStream = gulp.src(['test/input/index.html'], {
         buffer: false
-      })
+      });
+      done();
+    });
+
+    it('should add all scripts in index.html to the stream', function (done) {
+        inputStream
         .pipe(gulpScriptsIndex({
           IE: false
         }))
         .pipe(gutil.buffer(function(err, files) {
+          console.error(err);
           assertWithoutIE(files, done);
         }));
     });
 
     it('should add all scripts in index.html (including IE scripts) to the stream', function (done) {
       // load the input.html file as a file stream
-      gulp.src(['test/input/index.html'], {
-        buffer: false
-      })
+      inputStream
         .pipe(gulpScriptsIndex({
           IE: true
         }))
         .pipe(gutil.buffer(function(err, files) {
+          console.error(err);
           assertWithIE(files, done);
         }));
     });
   });
 
   describe('in-buffer-mode', function () {
+    var inputStream;
+
+    beforeEach(function(done) {
+      // load the input.html file as a file stream
+      inputStream = gulp.src(['test/input/index.html']);
+      done();
+    });
+
     it('should add all scripts in index.html to the stream', function (done) {
       // load the input.html file as a file stream
-      gulp.src(['test/input/index.html'])
+      inputStream
         .pipe(gulpScriptsIndex({
           IE: false
         }))
         .pipe(gutil.buffer(function(err, files) {
+          console.error(err);
           assertWithoutIE(files, done);
         }));
     });
 
     it('should add all scripts in index.html (including IE scripts) to the stream', function (done) {
       // load the input.html file as a file stream
-      gulp.src(['test/input/index.html'])
+      inputStream
         .pipe(gulpScriptsIndex({
           IE: true
         }))
         .pipe(gutil.buffer(function(err, files) {
+          console.error(err);
           assertWithIE(files, done);
         }));
     });
