@@ -77,5 +77,5 @@ MIT © [Benedikt Reiser]()
 [travis-url]: https://travis-ci.org/burnedikt/gulp-scripts-index
 [daviddm-image]: https://david-dm.org/burnedikt/gulp-scripts-index.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/burnedikt/gulp-scripts-index
-[coveralls-image]: https://coveralls.io/repos/burnedikt/gulp-scripts-index/badge.svg?branch=v0.1.0
-[coveralls-url]: https://coveralls.io/r/burnedikt/gulp-scripts-index?branch=v0.1.0
+[coveralls-image]: https://coveralls.io/repos/burnedikt/gulp-scripts-index/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/r/burnedikt/gulp-scripts-index?branch=master
