@@ -3,24 +3,19 @@ var should = require('should');
 var gulpScriptsIndex = require('../lib');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var File = require('vinyl');
+var through = require('through2');
 
 describe('gulp-scripts-index', function () {
   // expected array of scripts
   var expectedWithIE = [
-    'modernizr-2.8.3.min.js',
-    'jquery.min.js',
-    'plugins.js',
-    'main.js',
-    'ie-specific.js'
+    'test/input/vendor/modernizr-2.8.3.min.js',
+    'test/input/vendor/jquery.min.js',
+    'test/input/plugins.js',
+    'test/input/main.js',
+    'test/input/ie-specific.js'
   ];
-  // expected array of scripts
-  var expected = [
-    'modernizr-2.8.3.min.js',
-    'jquery.min.js',
-    'plugins.js',
-    'main.js'
-  ];
+  // expected array of scripts (everything in IE mode just without the ie-specific script)
+  var expected = expectedWithIE.slice(0, -1);
 
   /**
    * function asserting that all scripts have been detected and added to the stream
