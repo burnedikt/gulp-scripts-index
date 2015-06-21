@@ -40,6 +40,11 @@ describe('gulp-scripts-index', function () {
     done();
   };
 
+  /**
+   * function asserting that all scripts have been detected and added to the stream (including IE scripts)
+   * @param  {Array}   files List of relative paths to scripts
+   * @param  {Function} done
+   */
   var assertWithIE = function(files, done) {
     var expected = expectedWithIE;
     // loop over the files and create a new array with just the relative paths
@@ -67,12 +72,11 @@ describe('gulp-scripts-index', function () {
     });
 
     it('should add all scripts in index.html to the stream', function (done) {
-        inputStream
+      inputStream
         .pipe(gulpScriptsIndex({
           IE: false
         }))
         .pipe(gutil.buffer(function(err, files) {
-          console.error(err);
           assertWithoutIE(files, done);
         }));
     });
@@ -84,7 +88,6 @@ describe('gulp-scripts-index', function () {
           IE: true
         }))
         .pipe(gutil.buffer(function(err, files) {
-          console.error(err);
           assertWithIE(files, done);
         }));
     });
@@ -106,7 +109,6 @@ describe('gulp-scripts-index', function () {
           IE: false
         }))
         .pipe(gutil.buffer(function(err, files) {
-          console.error(err);
           assertWithoutIE(files, done);
         }));
     });
@@ -118,8 +120,29 @@ describe('gulp-scripts-index', function () {
           IE: true
         }))
         .pipe(gutil.buffer(function(err, files) {
-          console.error(err);
           assertWithIE(files, done);
+        }));
+    });
+  });
+
+  describe('error-handling', function () {
+    it('should detect no script if no valid html file given', function (done) {
+      // try to run plugin with non-existing html file
+      gulp.src('test/input/not-existing.html')
+        .pipe(gulpScriptsIndex())
+        .pipe(gutil.buffer(function(err, files) {
+          assert.equal(files.length, 0, 'should have detected no files');
+          done();
+        }));
+    });
+
+    it('should detect no script if no empty html file given', function (done) {
+      // try to run plugin with empty html file
+      gulp.src('test/input/empty.html')
+        .pipe(gulpScriptsIndex())
+        .pipe(gutil.buffer(function(err, files) {
+          assert.equal(files.length, 0, 'should have detected no files');
+          done();
         }));
     });
   });

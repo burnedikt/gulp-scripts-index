@@ -16,7 +16,8 @@ var handleErr = function (err) {
 gulp.task('static', function () {
   return gulp.src([
       '**/*.js',
-      '!node_modules/**'
+      '!node_modules/**',
+      '!coverage/**'
     ])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
