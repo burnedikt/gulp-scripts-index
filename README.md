@@ -43,7 +43,9 @@ gulp.task('test', function (done) {
         IE: false
     }))
     .pipe(gutil.buffer(function(err, files) {
-      // files now contains a list of all references scripts in the index.html - in the right order to kick right off
+      // files now contains a list of all references scripts in the index.html - in the right order to kick right off. However, it is still a list of vinyl file objects
+      // let's reduce it to an array of strings
+      files = files.map(function(file){return file.relative;})
       karma.start({
         configFile: __dirname + '/karma.conf.js',
         // pass in our detected script files - of course you will have to add your actual tests and / or mocks
