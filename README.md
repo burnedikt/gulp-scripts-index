@@ -58,7 +58,8 @@ gulp.task('test', function (done) {
 
 ## Options
 
-- `IE` {Boolean} - Defaults to false. Whether or not to also include scripts that are for IE only, i.e. they are surrounded by Conditional comments like so:
+- `IE` {Boolean} - Defaults to `false`. Whether or not to also include scripts that are for IE only, i.e. they are surrounded by Conditional comments like so:
+
 ```html
 <script src="main.js"></script>
 <!--[if IE 9]>
@@ -67,6 +68,8 @@ gulp.task('test', function (done) {
 ```
 
 In the example above, if `IE` is set to true, the plugin will also pipe the `ie-specific.js` in addition to the `main.js`.
+
+- `searchPaths` {Array} - Defaults to `[]`. this option can be used to specify additional locations in which to look for the script files referenced in index.html. That way, even files that are not stored at the actually specified location can be found and processed. The specified searchpaths are to be defined as relative to the process's cwd.
 
 ## License
 
