@@ -33,7 +33,7 @@ describe('gulp-scripts-index', function () {
       // make sure we got all expected scripts
       relatives.should.containDeepOrdered(expected);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
@@ -54,7 +54,7 @@ describe('gulp-scripts-index', function () {
       // make sure we got all expected scripts
       relatives.should.containDeepOrdered(expectedWithIE);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
@@ -135,26 +135,31 @@ describe('gulp-scripts-index', function () {
         }));
     });
 
-    it('should detect no script if no empty html file given', function (done) {
-      try {
-        // try to run plugin with empty html file
-        var inputStream = gulp.src('');
-        inputStream .push(new File({
-          path: 'empty.html',
-          contents: null
-        }));
-        inputStream
-          .pipe(gutil.buffer(function(err, files) {
-            console.log(files, err);
-          }))
-          .pipe(gulpScriptsIndex())
-          .pipe(gutil.buffer(function(err, files) {
-            files.should.have.length(0);
+    it('should detect no script if empty html file given', function (done) {
+      // try to run plugin with empty html file
+      gulp.src('test/input/index.html')
+        .pipe(
+          through.obj(function(file, enc, callback) {
+            // remove the contents
+            file.contents = null;
+            // also change the filename and fake the file as it was in the current directory
+            file.path = 'null.html';
+            file.base = './';
+            // and proceed with the monified file
+            callback(null, file);
+          })
+        )
+        .pipe(gulpScriptsIndex())
+        .pipe(gutil.buffer(function(err, files) {
+          try {
+            // the piped file has no contents so it should just be returned without any processing
+            files.should.have.length(1);
+            should(files[0].relative).be.a.String().and.be.equal('null.html');
             done();
-          }));
-      } catch(e) {
-        done(e);
-      }
+          } catch (e) {
+            done(e);
+          }
+        }));
     });
   });
 });
