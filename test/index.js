@@ -1,25 +1,25 @@
 'use strict';
-var should = require('should');
-var gulpScriptsIndex = require('../lib');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var through = require('through2');
+const should = require('should');
+const gulpScriptsIndex = require('../lib');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const through = require('through2');
 
 describe('gulp-scripts-index', function () {
   // expected array of scripts
-  var expectedVanilla = [
+  const expectedVanilla = [
     'test/input/vendor/modernizr-2.8.3.min.js',
     'test/input/vendor/jquery.min.js',
     'test/input/plugins.js'
   ];
   // expected array with specified search path
-  var expectedWithSearchPath = expectedVanilla.slice(0);
+  const expectedWithSearchPath = expectedVanilla.slice(0);
   expectedWithSearchPath.push('test/input/searchpath/main.js');
   // expected array of scripts (everything in IE mode just without the ie-specific script)
-  var expectedWithIE = expectedVanilla.slice(0);
+  const expectedWithIE = expectedVanilla.slice(0);
   expectedWithIE.push('test/input/ie-specific.js');
   // expected array of scripts including both ie scripts and scripts from a different search path
-  var expectedTotal = expectedWithSearchPath.slice(0);
+  const expectedTotal = expectedWithSearchPath.slice(0);
   expectedTotal.push('test/input/ie-specific.js');
 
   /**
@@ -27,10 +27,10 @@ describe('gulp-scripts-index', function () {
    * @param  {Array}   files List of relative paths to scripts
    * @param  {Function} done
    */
-  var assertScriptsDetected = function(actual, expected, done) {
+  const assertScriptsDetected = function (actual, expected, done) {
     try {
       // loop over the files and create a new array with just the relative paths
-      var relatives = actual.map(function(file) {
+      const relatives = actual.map((file) => {
         return file.relative;
       });
       // now that we have the file list, perform some assertions
@@ -44,9 +44,9 @@ describe('gulp-scripts-index', function () {
   };
 
   describe('in-streaming-mode', function () {
-    var inputStream;
+    let inputStream;
 
-    beforeEach(function(done) {
+    beforeEach(function (done) {
       // load the input.html file as a file stream
       inputStream = gulp.src(['test/input/index.html'], {
         buffer: false
@@ -59,7 +59,7 @@ describe('gulp-scripts-index', function () {
         .pipe(gulpScriptsIndex({
           IE: false
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedVanilla, done);
         }));
     });
@@ -70,7 +70,7 @@ describe('gulp-scripts-index', function () {
         .pipe(gulpScriptsIndex({
           IE: true
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedWithIE, done);
         }));
     });
@@ -82,7 +82,7 @@ describe('gulp-scripts-index', function () {
           IE: false,
           searchPaths: ['test/input/searchpath']
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedWithSearchPath, done);
         }));
     });
@@ -94,16 +94,16 @@ describe('gulp-scripts-index', function () {
           IE: true,
           searchPaths: ['test/input/searchpath']
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedTotal, done);
         }));
     });
   });
 
   describe('in-buffer-mode', function () {
-    var inputStream;
+    let inputStream;
 
-    beforeEach(function(done) {
+    beforeEach(function (done) {
       // load the input.html file as a file stream
       inputStream = gulp.src(['test/input/index.html']);
       done();
@@ -115,7 +115,7 @@ describe('gulp-scripts-index', function () {
         .pipe(gulpScriptsIndex({
           IE: false
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedVanilla, done);
         }));
     });
@@ -126,7 +126,7 @@ describe('gulp-scripts-index', function () {
         .pipe(gulpScriptsIndex({
           IE: true
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedWithIE, done);
         }));
     });
@@ -138,7 +138,7 @@ describe('gulp-scripts-index', function () {
           IE: false,
           searchPaths: ['test/input/searchpath']
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedWithSearchPath, done);
         }));
     });
@@ -150,7 +150,7 @@ describe('gulp-scripts-index', function () {
           IE: true,
           searchPaths: ['test/input/searchpath']
         }))
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           assertScriptsDetected(files, expectedTotal, done);
         }));
     });
@@ -161,7 +161,7 @@ describe('gulp-scripts-index', function () {
       // try to run plugin with non-existing html file
       gulp.src('test/input/not-existing.html')
         .pipe(gulpScriptsIndex())
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           files.should.have.length(0);
           done();
         }));
@@ -171,7 +171,7 @@ describe('gulp-scripts-index', function () {
       // try to run plugin with empty html file
       gulp.src('test/input/index.html')
         .pipe(
-          through.obj(function(file, enc, callback) {
+          through.obj((file, enc, callback) => {
             // remove the contents
             file.contents = null;
             // also change the filename and fake the file as it was in the current directory
@@ -182,7 +182,7 @@ describe('gulp-scripts-index', function () {
           })
         )
         .pipe(gulpScriptsIndex())
-        .pipe(gutil.buffer(function(err, files) {
+        .pipe(gutil.buffer((err, files) => {
           try {
             // the piped file has no contents so it should just be returned without any processing
             files.should.have.length(1);

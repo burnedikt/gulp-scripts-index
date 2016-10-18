@@ -9,12 +9,12 @@ const istanbul = require('gulp-istanbul');
 const coveralls = require('gulp-coveralls');
 const plumber = require('gulp-plumber');
 
-const handleErr = function (err) {
+const handleErr = (err) => {
   gutil.log(err.message);
   process.exit(1);
 };
 
-gulp.task('static', function () {
+gulp.task('static', () => {
   return gulp.src([
       '**/*.js',
       '!node_modules/**',
@@ -25,28 +25,28 @@ gulp.task('static', function () {
     .on('error', handleErr);
 });
 
-gulp.task('pre-test', function () {
+gulp.task('pre-test', () => {
   return gulp.src('lib/**/*.js')
     .pipe(istanbul({includeUntested: true}))
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', ['pre-test'], function (cb) {
+gulp.task('test', ['pre-test'], (cb) => {
   let mochaErr;
 
   gulp.src(['test/**/*.js'])
     .pipe(plumber())
     .pipe(mocha({reporter: 'spec'}))
-    .on('error', function (err) {
+    .on('error', (err) => {
       mochaErr = err;
     })
     .pipe(istanbul.writeReports())
-    .on('end', function () {
+    .on('end', () => {
       cb(mochaErr);
     });
 });
 
-gulp.task('coveralls', ['test'], function () {
+gulp.task('coveralls', ['test'], () => {
   if (!process.env.CI) {
     return;
   }
