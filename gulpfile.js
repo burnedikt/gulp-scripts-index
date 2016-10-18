@@ -1,14 +1,15 @@
 'use strict';
-var path = require('path');
-var gulp = require('gulp');
-var mocha = require('gulp-mocha');
-var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
-var istanbul = require('gulp-istanbul');
-var coveralls = require('gulp-coveralls');
-var plumber = require('gulp-plumber');
 
-var handleErr = function (err) {
+const path = require('path');
+const gulp = require('gulp');
+const mocha = require('gulp-mocha');
+const jshint = require('gulp-jshint');
+const jscs = require('gulp-jscs');
+const istanbul = require('gulp-istanbul');
+const coveralls = require('gulp-coveralls');
+const plumber = require('gulp-plumber');
+
+const handleErr = function (err) {
   console.log(err.message);
   process.exit(1);
 };
@@ -33,7 +34,7 @@ gulp.task('pre-test', function () {
 });
 
 gulp.task('test', ['pre-test'], function (cb) {
-  var mochaErr;
+  let mochaErr;
 
   gulp.src(['test/**/*.js'])
     .pipe(plumber())
