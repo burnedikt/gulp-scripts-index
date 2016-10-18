@@ -9,6 +9,9 @@
     "email": "benedikt.reiser@gmail.com",
     "url": "burnedikt.com"
   },
+  "engines": {
+    "node": ">=4"
+  },
   "files": [
     "lib"
   ],
