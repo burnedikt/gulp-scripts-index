@@ -2,15 +2,15 @@
 
 const path = require('path');
 const gulp = require('gulp');
+const gutil = require('gulp-util');
 const mocha = require('gulp-mocha');
-const jshint = require('gulp-jshint');
-const jscs = require('gulp-jscs');
+const eslint = require('gulp-eslint');
 const istanbul = require('gulp-istanbul');
 const coveralls = require('gulp-coveralls');
 const plumber = require('gulp-plumber');
 
 const handleErr = function (err) {
-  console.log(err.message);
+  gutil.log(err.message);
   process.exit(1);
 };
 
@@ -20,10 +20,8 @@ gulp.task('static', function () {
       '!node_modules/**',
       '!coverage/**'
     ])
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'))
-    .pipe(jscs())
+    .pipe(eslint())
+    .pipe(eslint.format())
     .on('error', handleErr);
 });
 
