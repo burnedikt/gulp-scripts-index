@@ -1,13 +1,13 @@
 {
   "name": "gulp-scripts-index",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Input html file(s) and get a stream of all referenced scripts which can then be usedfor further processing like concatenation, minification or for testing",
   "homepage": "",
   "repository": "burnedikt/gulp-scripts-index",
   "author": {
     "name": "Benedikt Reiser",
     "email": "benedikt.reiser@gmail.com",
-    "url": "benedikt-reiser.de"
+    "url": "burnedikt.com"
   },
   "files": [
     "lib"
