@@ -1,53 +1,52 @@
 'use strict';
-var path = require('path');
-var gulp = require('gulp');
-var mocha = require('gulp-mocha');
-var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
-var istanbul = require('gulp-istanbul');
-var coveralls = require('gulp-coveralls');
-var plumber = require('gulp-plumber');
 
-var handleErr = function (err) {
-  console.log(err.message);
+const path = require('path');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const mocha = require('gulp-mocha');
+const eslint = require('gulp-eslint');
+const istanbul = require('gulp-istanbul');
+const coveralls = require('gulp-coveralls');
+const plumber = require('gulp-plumber');
+
+const handleErr = (err) => {
+  gutil.log(err.message);
   process.exit(1);
 };
 
-gulp.task('static', function () {
+gulp.task('static', () => {
   return gulp.src([
       '**/*.js',
       '!node_modules/**',
       '!coverage/**'
     ])
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'))
-    .pipe(jscs())
+    .pipe(eslint())
+    .pipe(eslint.format())
     .on('error', handleErr);
 });
 
-gulp.task('pre-test', function () {
+gulp.task('pre-test', () => {
   return gulp.src('lib/**/*.js')
     .pipe(istanbul({includeUntested: true}))
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', ['pre-test'], function (cb) {
-  var mochaErr;
+gulp.task('test', ['pre-test'], (cb) => {
+  let mochaErr;
 
   gulp.src(['test/**/*.js'])
     .pipe(plumber())
     .pipe(mocha({reporter: 'spec'}))
-    .on('error', function (err) {
+    .on('error', (err) => {
       mochaErr = err;
     })
     .pipe(istanbul.writeReports())
-    .on('end', function () {
+    .on('end', () => {
       cb(mochaErr);
     });
 });
 
-gulp.task('coveralls', ['test'], function () {
+gulp.task('coveralls', ['test'], () => {
   if (!process.env.CI) {
     return;
   }
