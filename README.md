@@ -1,4 +1,4 @@
-# gulp-scripts-index [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+# gulp-scripts-index [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![bitHound Dependencies](https://www.bithound.io/github/burnedikt/gulp-scripts-index/badges/dependencies.svg)](https://www.bithound.io/github/burnedikt/gulp-scripts-index/master/dependencies/npm) [![Coverage percentage][coveralls-image]][coveralls-url]
 > Input html file(s) and get a (ordered) stream of all referenced scripts which can then be used for further processing, like concatenation, minification or for testing
 
 
